@@ -3,8 +3,8 @@
 $PluginInfo['PurchaseAnonymousDiscussions'] = array(
    'Name' => 'Purchase Anonymous Discussions',
    'Description' => "Allows members to purchase Anonymous Discussions",
-   'Version' => '0.1.1b',
-   'RequiredPlugins' => array('MarketPlace' => '0.9.7.1b'),
+   'Version' => '0.1.2b',
+   'RequiredPlugins' => array('MarketPlace' => '0.1.9b'),
    'RequiredApplications' => array('Vanilla' => '2.1'),
    'Author' => 'Paul Thomas',
    'AuthorEmail' => 'dt01pqt_pt@yahoo.com',
