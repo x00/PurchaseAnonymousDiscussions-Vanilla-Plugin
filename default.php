@@ -3,7 +3,7 @@
 $PluginInfo['PurchaseAnonymousDiscussions'] = array(
    'Name' => 'Purchase Anonymous Discussions',
    'Description' => "Allows members to purchase Anonymous Discussions",
-   'Version' => '0.1.4b',
+   'Version' => '0.1.5b',
    'RequiredPlugins' => array('MarketPlace' => '0.1.9b'),
    'RequiredApplications' => array('Vanilla' => '2.1'),
    'Author' => 'Paul Thomas',
@@ -109,7 +109,7 @@ class PurchaseAnonymousDiscussions extends Gdn_Plugin {
             $BuySome='';
         if(!$Discussion && $this->HasAnon){
             $Args['Options'].='<li>'.$this->ShowOption($Sender->Form,$Message).'</li>';
-        }else if($Discussion->AnonUser){
+        }else if($Discussion && GetValue('AnonUser',$Discussion)){
             $Args['Options'].='<li>'.$this->ShowOption($Sender->Form,$Message,array('checked'=>'checked','disabled'=>'disabled'),TRUE).'</li>';
         }else{
             $Message = T('Post as Anonymous').$BuySome;
@@ -177,7 +177,7 @@ class PurchaseAnonymousDiscussions extends Gdn_Plugin {
     }
     
     private function AnonCommentValid($Discussion){
-        if(!$Discussion->AnonUser)
+        if(!GetValue('AnonUser',$Discussion))
             return FALSE;
         $AnonUserHash = Getvalue('AnonUserHash',$Discussion);
 
