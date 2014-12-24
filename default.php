@@ -178,7 +178,7 @@ class PurchaseAnonymousDiscussions extends Gdn_Plugin {
             return FALSE;
         $AnonUserHash = Getvalue('AnonUserHash',$Discussion);
 
-        if($AnonUserHash!=md5('AnonymousUser'.Gdn::Session()->UserID.Gdn::Session()->User->DateFirstVisit)){
+        if(Gdn::Session()->IsValid() && $AnonUserHash!=md5('AnonymousUser'.Gdn::Session()->UserID.Gdn::Session()->User->DateFirstVisit)){
             return FALSE;
         }else{
             $DiscussionID = GetValue('DiscussionID',$Discussion);
