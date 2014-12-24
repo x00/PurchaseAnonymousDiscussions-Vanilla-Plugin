@@ -98,6 +98,9 @@ class PurchaseAnonymousDiscussions extends Gdn_Plugin {
     }
 
     public function Base_DiscussionFormOptions_Handler($Sender,$Args) {
+         if(!Gdn::Session()->CheckPermission('Plugins.MarketPlace.UseStore'))
+            return
+         
         $Discussion = GetValue('Discussion',$Sender)?$Sender->Discussion:(GetValue('Discussion',$Args)?$Args['Discussion']:false);
         $BuyMore = Wrap(T('BuyMoreSpacer',' &nbsp; ').Anchor(T('Buy More'),C('Plugins.MarketPlace.StoreURI','store').'/type/PurchaseAnonymousDiscussions'),'span');
         $BuySome = Wrap(T('BuyMoreSpacer',' &nbsp; ').Anchor(T('Buy Some'),C('Plugins.MarketPlace.StoreURI','store').'/type/PurchaseAnonymousDiscussions'),'span');
