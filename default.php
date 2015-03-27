@@ -3,7 +3,7 @@
 $PluginInfo['PurchaseAnonymousDiscussions'] = array(
    'Name' => 'Purchase Anonymous Discussions',
    'Description' => "Allows members to purchase Anonymous Discussions",
-   'Version' => '0.1.5b',
+   'Version' => '0.1.6b',
    'RequiredPlugins' => array('MarketPlace' => '0.1.9b'),
    'RequiredApplications' => array('Vanilla' => '2.1'),
    'Author' => 'Paul Thomas',
@@ -101,7 +101,7 @@ class PurchaseAnonymousDiscussions extends Gdn_Plugin {
          if(!Gdn::Session()->CheckPermission('Plugins.MarketPlace.UseStore'))
             return
          
-        $Discussion = GetValue('Discussion',$Sender)?$Sender->Discussion:(GetValue('Discussion',$Args)?$Args['Discussion']:false);
+        $Discussion = $Sender->Data('Discussion', FALSE);
         $BuyMore = Wrap(T('BuyMoreSpacer',' &nbsp; ').Anchor(T('Buy More'),C('Plugins.MarketPlace.StoreURI','store').'/type/PurchaseAnonymousDiscussions'),'span');
         $BuySome = Wrap(T('BuyMoreSpacer',' &nbsp; ').Anchor(T('Buy Some'),C('Plugins.MarketPlace.StoreURI','store').'/type/PurchaseAnonymousDiscussions'),'span');
         $Message = T('Anonymous Post').$BuyMore;
@@ -189,8 +189,8 @@ class PurchaseAnonymousDiscussions extends Gdn_Plugin {
         }
     }
     
-    public function DiscussionController_Render_Before($Sender){
-        if(!$this->AnonCommentValid($Sender->Discussion))
+    public function DiscussionController_Render_Before($Sender, $Args){
+        if(!$this->AnonCommentValid($Sender->Data('Discussion')))
             return;
         $this->CanComment = TRUE;
         $this->AnonUser = Gdn::UserModel()->GetByUsername(C('Plugins.PurchaseAnonymousDiscussions.UserName','AnonymousUser'));
