@@ -135,40 +135,40 @@ class PurchaseAnonymousDiscussions extends Gdn_Plugin {
     }
     
     public function DiscussionModel_BeforeSaveDiscussion_Handler($Sender,&$Args){
-        $Feilds = &$Args['FormPostValues'];
-        if(GetValue('DiscussionID',$Feilds) ||!$this->HasAnon || !GetValue('AnonUser',$Feilds)){
-            if(isset($Feilds['AnonUser']) && $this->AnnonDiscussionUser(GetValue('DiscussionID',$Feilds))){
-                $Feilds['AnonUser']=1;
+        $Fields = &$Args['FormPostValues'];
+        if(GetValue('DiscussionID',$Fields) ||!$this->HasAnon || !GetValue('AnonUser',$Fields)){
+            if(isset($Fields['AnonUser']) && $this->AnnonDiscussionUser(GetValue('DiscussionID',$Fields))){
+                $Fields['AnonUser']=1;
             }else{
-                $Feilds['AnonUser']=0;
+                $Fields['AnonUser']=0;
             }
             return;
         }
         $AnonUser = Gdn::UserModel()->GetByUsername(C('Plugins.PurchaseAnonymousDiscussions.UserName','AnonymousUser'));
-        $Feilds['InsertUserID'] = $AnonUser->UserID;
-        $Feilds['UpdateUserID'] = $AnonUser->UserID;
-        $Feilds['AnonUserHash'] = md5('AnonymousUser'.Gdn::Session()->UserID.Gdn::Session()->User->DateFirstVisit);
+        $Fields['InsertUserID'] = $AnonUser->UserID;
+        $Fields['UpdateUserID'] = $AnonUser->UserID;
+        $Fields['AnonUserHash'] = md5('AnonymousUser'.Gdn::Session()->UserID.Gdn::Session()->User->DateFirstVisit);
     }
     
     public function DiscussionModel_AfterSaveDiscussion_Handler($Sender,$Args){
-        $Feilds = $Args['FormPostValues'];
-        if(!$this->HasAnon || !$Feilds['AnonUser'])
+        $Fields = $Args['FormPostValues'];
+        if(!$this->HasAnon || !$Fields['AnonUser'])
             return;
-        UserModel::SetMeta(Gdn::Session()->UserID,array('DiscussionID.'.$Feilds['DiscussionID']=>1,'Quantity'=>$this->HasAnon-1),'AnonymousDiscussions.');
+        UserModel::SetMeta(Gdn::Session()->UserID,array('DiscussionID.'.$Fields['DiscussionID']=>1,'Quantity'=>$this->HasAnon-1),'AnonymousDiscussions.');
     }
     
     public function CommentModel_BeforeSaveComment_Handler($Sender,&$Args){
-        $Feilds = &$Args['FormPostValues'];
-        if($Fields['CommentID']) 
+        $Fields = &$Args['FormPostValues'];
+        if(GetValue('CommentID', $Fields)) 
             return;
         $DiscussionModel = new DiscussionModel();
-        $Discussion = $DiscussionModel->GetID($Feilds['DiscussionID']);
+        $Discussion = $DiscussionModel->GetID($Fields['DiscussionID']);
 
         if(!$this->AnonCommentValid($Discussion))
             return;
         $AnonUser = Gdn::UserModel()->GetByUsername(C('Plugins.PurchaseAnonymousDiscussions.UserName','AnonymousUser'));
-        $Feilds['InsertUserID'] = $AnonUser->UserID;
-        $Feilds['UpdateUserID'] = $AnonUser->UserID;
+        $Fields['InsertUserID'] = $AnonUser->UserID;
+        $Fields['UpdateUserID'] = $AnonUser->UserID;
     }
     
     private function AnnonDiscussionUser($DiscussionID){
